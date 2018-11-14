@@ -15,15 +15,6 @@ bm = bmesh.from_edit_mesh(me)
 # bm.from_mesh(me)
 
 bm.faces.active = None
-# bpy.ops.mesh.hide(unselected=False)
-# bpy.context.space_data.use_occlude_geometry = True
-
-
-# Useful properties
-# bm.faces[150].normal  # -> Vector()
-# bm.faces[150].select = True  # Set a face selected
-# bpy.ops.mesh.hide(unselected=True)
-
 
 cam = bpy.data.objects["Camera"]
 cam_rotation = cam.rotation_euler
@@ -32,15 +23,6 @@ cam_dir.rotate(cam_rotation)
 print("Camera direction:", cam_dir)
 
 color_layer = bm.loops.layers.color['Col']
-
-# for vert in bm.verts:
-#     direction = vert.co - cam.location
-#     if direction.dot(vert.normal) < 0:
-#         vert.select = True
-#         for face in vert.link_faces:
-#             face.select = True
-#             for loop in face.loops:
-#                 loop[color_layer] = (1, 0, 1)
 
 for face in bm.faces:
     direction = face.normal - cam.location
