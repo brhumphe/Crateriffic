@@ -10,9 +10,9 @@ bl_info = {
 }
 
 
-class HighlightVisibleOperator(bpy.types.Operator):
+class HighlightFacingOperator(bpy.types.Operator):
     bl_idname = "mesh.highlight_visible"
-    bl_label = "Highlight Visible"
+    bl_label = "Highlight Faces who are tilted towards the camera"
 
     highlight_property = bpy.props.StringProperty()
 
@@ -65,12 +65,12 @@ class HighlightVisibleOperator(bpy.types.Operator):
         return {'FINISHED'}
 
 def register():
-    bpy.utils.register_class(HighlightVisibleOperator)
+    bpy.utils.register_class(HighlightVisibleOpFacing
 
     print("%s registration complete" % bl_info.get("name"))
 
 def unregister():
-    bpy.utils.unregister_class(HighlightVisibleOperator)
+    bpy.utils.unregister_class(HighlightVisibleOpFacing
 
     print("%s unregistration complete" % bl_info.get("name"))
 
