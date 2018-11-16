@@ -4,7 +4,7 @@ import bmesh
 # This extra utility function handles transforming world coordinates to normalized device coordinates
 from bpy_extras.object_utils import world_to_camera_view
 
-
+bpy.ops.object.mode_set(mode='EDIT')
 obj = bpy.context.edit_object
 me = obj.data
 mesh = bmesh.from_edit_mesh(me)
@@ -38,4 +38,4 @@ for v in mesh.verts:
 
 # Write out changes
 bmesh.update_edit_mesh(me, True)
-# bpy.ops.object.mode_set(mode='OBJECT')
+bpy.ops.object.mode_set(mode='OBJECT')
