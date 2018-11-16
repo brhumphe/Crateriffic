@@ -5,7 +5,7 @@ from mathutils import Vector
 bl_info = {
     "name": "Crateriffic",
     "author": "Benjamin Humpherys",
-    "location": "View3D > Tools > Craterrific",
+    "location": "View3D > Tools > Crateriffic",
     "category": "Development"
 }
 
@@ -64,15 +64,18 @@ class HighlightFacingOperator(bpy.types.Operator):
 
         return {'FINISHED'}
 
+
 def register():
-    bpy.utils.register_class(HighlightVisibleOpFacing
+    bpy.utils.register_class(HighlightFacingOperator)
 
     print("%s registration complete" % bl_info.get("name"))
 
-def unregister():
-    bpy.utils.unregister_class(HighlightVisibleOpFacing
 
-    print("%s unregistration complete" % bl_info.get("name"))
+def unregister():
+    bpy.utils.unregister_class(HighlightFacingOperator)
+
+    print("%s unregistering complete" % bl_info.get("name"))
+
 
 if __name__ == "__main__":
     try:
