@@ -1,7 +1,9 @@
 from typing import Optional
 
+__all__ = ['mode_set']
 
-def mode_set(mode: str, toggle: Optional[bool] = False) -> None:
+
+def mode_set(*, mode: str, toggle: Optional[bool] = False) -> None:
     """
    Sets the object interaction mode
 

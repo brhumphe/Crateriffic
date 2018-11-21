@@ -1,9 +1,15 @@
+import types
 from typing import Any
 import bpy
-
+from .types import *
 
 # TODO: Create modules for this later
-#BMesh = ... # type: Any
+
+
+def new() -> BMesh:
+    ...
+
+
 
 def from_edit_mesh(mesh: bpy.types.Mesh) -> BMesh:
     """
@@ -29,3 +35,4 @@ def update_edit_mesh(mesh: bpy.types.Mesh, tessface=True, destructive=True) -> N
     :arg destructive: Use when geometry has been added or removed.
     :type destructive: boolean
     """
+    ...

@@ -1,3 +1,3 @@
 from ._bmesh import *
 
-__all__ = ['BMesh']
+__all__ = _bmesh.__all__
