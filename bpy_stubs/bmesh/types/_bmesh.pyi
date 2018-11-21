@@ -12,3 +12,13 @@ class BMesh:
         :param shape_key_index: The shape key index to use.
         :return:
         """
+        ...
+
+    # TODO: Update BMesh.faces
+    faces = []
+
+    # TODO: Update BMesh.loops
+    loops = []
+
+    # TODO: Update BMesh.verts
+    verts = []

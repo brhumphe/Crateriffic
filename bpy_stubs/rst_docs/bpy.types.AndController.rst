@@ -1,0 +1,49 @@
+AndController(Controller)
+=========================
+
+.. module:: bpy.types
+
+base classes --- :class:`bpy_struct`, :class:`Controller`
+
+.. class:: AndController(Controller)
+
+   Controller passing on events based on a logical AND operation
+
+.. rubric:: Inherited Properties
+
+.. hlist::
+   :columns: 2
+
+   * :class:`bpy_struct.id_data`
+   * :class:`Controller.name`
+   * :class:`Controller.type`
+   * :class:`Controller.show_expanded`
+   * :class:`Controller.active`
+   * :class:`Controller.use_priority`
+   * :class:`Controller.actuators`
+   * :class:`Controller.states`
+
+.. rubric:: Inherited Functions
+
+.. hlist::
+   :columns: 2
+
+   * :class:`bpy_struct.as_pointer`
+   * :class:`bpy_struct.driver_add`
+   * :class:`bpy_struct.driver_remove`
+   * :class:`bpy_struct.get`
+   * :class:`bpy_struct.is_property_hidden`
+   * :class:`bpy_struct.is_property_readonly`
+   * :class:`bpy_struct.is_property_set`
+   * :class:`bpy_struct.items`
+   * :class:`bpy_struct.keyframe_delete`
+   * :class:`bpy_struct.keyframe_insert`
+   * :class:`bpy_struct.keys`
+   * :class:`bpy_struct.path_from_id`
+   * :class:`bpy_struct.path_resolve`
+   * :class:`bpy_struct.property_unset`
+   * :class:`bpy_struct.type_recast`
+   * :class:`bpy_struct.values`
+   * :class:`Controller.link`
+   * :class:`Controller.unlink`
+
