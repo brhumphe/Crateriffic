@@ -1,6 +1,7 @@
 from typing import Optional, Union, List, Any, Tuple
 
 from bpy.types import ID, FCurve
+import bpy
 
 __all__ = ['bpy_struct']
 
@@ -75,3 +76,42 @@ class bpy_struct:
         :return: custom property key, value pairs.
         """
         ...
+
+    def keyframe_delete(self, data_path: str, index=-1, frame=bpy.context.scene.frame_current, group=""):
+        """
+        :arg data_path: path to the property to remove a key, analogous to the fcurve's data path.
+        :type data_path: str
+        :arg index: array index of the property to remove a key. Defaults to -1 removing all indices or a single channel if the property is not an array.
+        :type index: int
+        :arg frame: The frame on which the keyframe is deleted, defaulting to the current frame.
+        :type frame: float
+        :arg group: The name of the group the F-Curve should be added to if it doesn't exist yet.
+        :type group: str
+        :return: Success of keyframe deletion.
+        :rtype: bool
+      """
+        ...
+
+    def keyframe_insert(self, data_path, index=-1, frame=bpy.context.scene.frame_current, group=""):
+        """
+        Insert a keyframe on the property given, adding fcurves and animation data when necessary.
+
+        :arg data_path: path to the property to key, analogous to the fcurve's data path.
+        :type data_path: string
+        :arg index: array index of the property to key.
+           Defaults to -1 which will key all indices or a single channel if the property is not an array.
+        :type index: int
+        :arg frame: The frame on which the keyframe is inserted, defaulting to the current frame.
+        :type frame: float
+        :arg group: The name of the group the F-Curve should be added to if it doesn't exist yet.
+        :type group: str
+        :arg options: Optional flags:
+
+           - ``INSERTKEY_NEEDED`` Only insert keyframes where they're needed in the relevant F-Curves.
+           - ``INSERTKEY_VISUAL`` Insert keyframes based on 'visual transforms'.
+           - ``INSERTKEY_XYZ_TO_RGB`` Color for newly added transformation F-Curves (Location, Rotation, Scale)
+              and also Color is based on the transform axis.
+        :type flag: set
+        :return: Success of keyframe insertion.
+        :rtype: boolean
+        """
