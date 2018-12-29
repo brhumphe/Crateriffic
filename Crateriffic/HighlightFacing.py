@@ -2,6 +2,9 @@ import bpy
 import bmesh
 from mathutils import Vector
 
+# This extra utility function handles transforming world coordinates to normalized device coordinates
+from bpy_extras.object_utils import world_to_camera_view
+
 bl_info = {
     "name": "Crateriffic",
     "author": "Benjamin Humpherys",
@@ -33,10 +36,10 @@ class HighlightFacingOperator(bpy.types.Operator):
         me = obj.data
 
         # Get a BMesh representation
-        bm = bmesh.from_edit_mesh(me)
+        mesh = bmesh.from_edit_mesh(me)
         # bm.from_mesh(me)
 
-        bm.faces.active = None
+        mesh.faces.active = None
 
         cam = bpy.data.objects["Camera"]
         cam_rotation = cam.rotation_euler
@@ -44,18 +47,29 @@ class HighlightFacingOperator(bpy.types.Operator):
         cam_dir.rotate(cam_rotation)
         print("Camera direction:", cam_dir)
 
-        color_layer = bm.loops.layers.color['Col']
+        color_layer = mesh.loops.layers.color['Col']
 
-        for face in bm.faces:
-            direction = face.normal - cam.location
-            if direction.dot(face.normal) < 0:
-                # face.select = True
-                color = (1, 0, 1)
-            else:
-                color = (1, 1, 1)
+        # NOTE: This does not yet correctly handle occluded geometry!
+        for v in mesh.verts:
+            color = (1, 1, 1)
 
-            for loop in face.loops:
-                loop[color_layer] = color
+            p = world_to_camera_view(bpy.context.scene, cam, v.co)
+            # Check if vertex is visible to camera
+            if (0 < p.x < 1) and (0 < p.y < 1):
+                # v.select = True
+                # Check faces connected to vertex
+                for face in v.link_faces:
+                    direction = face.normal - cam.location
+
+                    if direction.dot(face.normal) < 0:
+                        face.select = True
+                        color = (1, 0, 1)
+
+            for face in v.link_faces:
+                # Color faces depending on dot product direction
+                for loop in face.loops:
+                    loop[color_layer] = color
+
 
         # Show the updates in the viewport
         # and recalculate n-gon tessellation.
