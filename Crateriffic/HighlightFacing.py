@@ -5,13 +5,6 @@ from mathutils import Vector
 # This extra utility function handles transforming world coordinates to normalized device coordinates
 from bpy_extras.object_utils import world_to_camera_view
 
-bl_info = {
-    "name": "Crateriffic",
-    "author": "Benjamin Humpherys",
-    "location": "View3D > Tools > Crateriffic",
-    "category": "Development"
-}
-
 
 class HighlightFacingOperator(bpy.types.Operator):
     bl_idname = "mesh.highlight_visible"
