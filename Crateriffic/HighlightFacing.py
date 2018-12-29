@@ -40,7 +40,10 @@ class HighlightFacingOperator(bpy.types.Operator):
         cam_dir.rotate(cam_rotation)
         print("Camera direction:", cam_dir)
 
-        color_layer = mesh.loops.layers.color['Col']
+        try:
+            color_layer = mesh.loops.layers.color['Col']
+        except:
+            color_layer = mesh.loops.layers.color.new("Col")
 
         # NOTE: This does not yet correctly handle occluded geometry!
         for v in mesh.verts:
@@ -51,6 +54,7 @@ class HighlightFacingOperator(bpy.types.Operator):
             if (0 < p.x < 1) and (0 < p.y < 1):
                 # v.select = True
                 # Check faces connected to vertex
+                # NOTE: This is not ALL faces adjacent to a vertex. :-/
                 for face in v.link_faces:
                     direction = face.normal - cam.location
 
@@ -82,13 +86,3 @@ def unregister():
     bpy.utils.unregister_class(HighlightFacingOperator)
 
     print("%s unregistering complete" % bl_info.get("name"))
-
-
-if __name__ == "__main__":
-    try:
-        unregister()
-    except Exception as e:
-        print(e)
-        pass
-
-    register()

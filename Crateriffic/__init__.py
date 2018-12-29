@@ -5,19 +5,28 @@ bl_info = {
     "category": "Development"
 }
 
-from .HighlightFacing import HighlightFacingOperator
+# When bpy is already in local, we know this is not the initial import...
+if "bpy" in locals():
+    print("===========Reloading Crateriffic============")
+    # ...so we need to reload our submodule(s) using importlib
+    import importlib
+    if "HighlightFacing" in locals():
+        importlib.reload(HighlightFacing)
 
+
+# This is only relevant on first run, on later reloads those modules
+# are already in locals() and those statements do not do anything.
 import bpy
-
-classes = [HighlightFacingOperator]
+from . import HighlightFacing
+classes = [HighlightFacing.HighlightFacingOperator]
 
 def register():
     for c in classes:
-        bpy.register_class(c)
+        bpy.utils.register_class(c)
     
 def unregister():
     for c in reversed(classes):
-        bpy.unregister_class(c)
+        bpy.utils.unregister_class(c)
 
 if __name__ == "__main__":
     register()
