@@ -12,13 +12,17 @@ if "bpy" in locals():
     import importlib
     if "HighlightFacing" in locals():
         importlib.reload(HighlightFacing)
+        
+    if "rayscan" in locals():
+        importlib.reload(rayscan)
 
 
 # This is only relevant on first run, on later reloads those modules
 # are already in locals() and those statements do not do anything.
 import bpy
-from . import HighlightFacing
-classes = [HighlightFacing.HighlightFacingOperator]
+from . import HighlightFacing, rayscan
+classes = [HighlightFacing.HighlightFacingOperator,
+            rayscan.RayScanOperator]
 
 def register():
     for c in classes:

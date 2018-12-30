@@ -8,15 +8,17 @@ from bpy_extras.object_utils import world_to_camera_view
 
 class HighlightFacingOperator(bpy.types.Operator):
     bl_idname = "mesh.highlight_visible"
-    bl_label = "Highlight Faces who are tilted towards the camera"
-
-    highlight_property = bpy.props.StringProperty()
+    bl_label = "Highlight Facing"
+    bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
     def poll(cls, context):
         return context.object.type == 'MESH'
 
     def invoke(self, context, event):
+        return self.execute(context)
+
+    def execute(self, context):
         print("Invoking Highlight Visible")
         # Check if a mesh object is selected
         try:
