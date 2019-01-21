@@ -30,23 +30,29 @@ class RayScanOperator(bpy.types.Operator):
 
         context.window_manager.modal_handler_add(self)
         # return {'RUNNING_MODAL'}
+
+        area = next(area for area in bpy.context.screen.areas if area.type == 'VIEW_3D')
+        space = next(space for space in area.spaces if space.type == 'VIEW_3D')
+        self.old_show_render = space.show_only_render
+        self.old_show_manipulator = context.space_data.show_manipulator
+        space.show_only_render = True
+        context.space_data.show_manipulator = False
         return self.execute(context)
 
     
     def modal(self, context, event):
-        context.area.header_text_set("Running modal")
+        context.area.header_text_set("Showing intersections. ESC to exit")
 
         context.area.tag_redraw()
-        
-        if event.type == 'LEFTMOUSE':
-            context.area.header_text_set()
-            bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-            return {'FINISHED'}
+        area = next(area for area in bpy.context.screen.areas if area.type == 'VIEW_3D')
+        space = next(space for space in area.spaces if space.type == 'VIEW_3D')
 
-        elif event.type in {'RIGHTMOUSE', 'ESC'}:
+        if event.type in {'ESC'}:
             context.area.header_text_set()
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
-            return {'CANCELLED'}
+            space.show_only_render = self.old_show_render
+            context.space_data.show_manipulator = self.old_show_manipulator
+            return {'FINISHED'}
         
         else:
             return {'PASS_THROUGH'}
@@ -58,7 +64,7 @@ class RayScanOperator(bpy.types.Operator):
         # Draw stuff here
         bgl.glEnable(bgl.GL_BLEND)
         bgl.glColor4f(1.0, 0.0, 1.0, 1.0)
-        bgl.glPointSize(4)
+        bgl.glPointSize(8)
 
         bgl.glBegin(bgl.GL_POINTS)
         for point in self.points:
