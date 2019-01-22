@@ -2,8 +2,9 @@ import bpy
 import bgl
 import bmesh
 from bpy_extras.view3d_utils import location_3d_to_region_2d
-from mathutils import Vector
+from mathutils import Vector, Euler
 from mathutils.bvhtree import BVHTree
+from .utils import linspace
 
 class RayScanOperator(bpy.types.Operator):
     bl_idname = "mesh.rayscan"
@@ -52,6 +53,7 @@ class RayScanOperator(bpy.types.Operator):
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             space.show_only_render = self.old_show_render
             context.space_data.show_manipulator = self.old_show_manipulator
+            self.points.clear()
             return {'FINISHED'}
         
         else:
@@ -63,7 +65,7 @@ class RayScanOperator(bpy.types.Operator):
     def draw_handler(self, context, args):
         # Draw stuff here
         bgl.glEnable(bgl.GL_BLEND)
-        bgl.glColor4f(1.0, 0.0, 1.0, 1.0)
+        bgl.glColor4f(1.0, 0.5, 1.0, 1.0)
         bgl.glPointSize(8)
 
         bgl.glBegin(bgl.GL_POINTS)
@@ -79,6 +81,7 @@ class RayScanOperator(bpy.types.Operator):
         bgl.glColor4f(0.0, 0.0, 0.0, 1.0)
 
     def execute(self, context):
+        self.points.clear()
         bvh = BVHTree.FromObject(context.object, context.scene)
 
         # Get object data
@@ -86,14 +89,25 @@ class RayScanOperator(bpy.types.Operator):
         camera = bpy.data.objects['Camera']
 
         # Find out which direction the camera is pointing
-        # TODO: Modify to cast a grid of vectors using camera.data.angle_x/y
-        ray_dir = Vector((0, 0, -1))
-        ray_dir.rotate(camera.rotation_euler)
+        angle_x = camera.data.angle_x
+        angle_y = camera.data.angle_y
 
-        # Cast a ray towards the center of the camera view
-        loc, norm, index, distance = bvh.ray_cast(camera.location, ray_dir)
-        if loc is not None:
-            self.points.append(loc)
-        print(loc)
+        points_x = linspace(-angle_x/2, angle_x/2, self.count_x)
+        points_y = linspace(-angle_y/2, angle_y/2, self.count_y)
+        
+        for py in points_y:
+            for px in points_x:
+                ray_dir = Vector((0, 0, -1))
+                # NOTE: From perspective of camera, rotating around x produces vertical tilt.
+                # BUG: Noticable distortion! Points may go outside FOV!
+                ray_dir.rotate(Euler((py, px, 0)))
+                ray_dir.rotate(camera.rotation_euler)
+
+                # Cast a ray towards the center of the camera view
+                # BUG: Does not account for cases when the object has been rotated!!!!
+                loc, norm, index, distance = bvh.ray_cast(camera.location, ray_dir)
+                if loc is not None:
+                    self.points.append(loc)
+        # print(loc)
 
         return {'RUNNING_MODAL'}
