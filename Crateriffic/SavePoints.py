@@ -5,10 +5,12 @@ from .rayscan import RayScanOperator
 def write_some_data(context, filepath, use_some_setting):
     print("running write_some_data...")
     f = open(filepath, 'w', encoding='utf-8')
-    # f.write("Hello World %s" % use_some_setting)
     writer = csv.writer(f)
-    print("Writing rows:", len(RayScanOperator.points))
-    writer.writerows(RayScanOperator.points)
+
+    mesh = bpy.data.meshes['scan']
+    points = [list(v.co) for v in mesh.vertices]
+
+    writer.writerows(points)
     f.close()
 
     return {'FINISHED'}
@@ -22,7 +24,7 @@ from bpy.types import Operator
 
 # TODO: Re-write to export the data from the mesh holding the scan results.
 class ExportRayScan(Operator, ExportHelper):
-    """This appears in the tooltip of the operator and in the generated docs"""
+    """Save any scan data to a csv file."""
     bl_idname = "export_scan.points"  # important since its how bpy.ops.import_test.some_data is constructed
     bl_label = "Save Scan"
 
@@ -35,43 +37,7 @@ class ExportRayScan(Operator, ExportHelper):
             maxlen=255,  # Max internal buffer length, longer would be clamped.
             )
 
-    # List of operator properties, the attributes will be assigned
-    # to the class instance from the operator settings before calling.
-    use_setting = BoolProperty(
-            name="Example Boolean",
-            description="Example Tooltip",
-            default=True,
-            )
 
-    # type = EnumProperty(
-    #         name="Example Enum",
-    #         description="Choose between two items",
-    #         items=(('OPT_A', "First Option", "Description one"),
-    #                ('OPT_B', "Second Option", "Description two")),
-    #         default='OPT_A',
-    #         )
 
     def execute(self, context):
         return write_some_data(context, self.filepath, self.use_setting)
-
-
-# # Only needed if you want to add into a dynamic menu
-# def menu_func_export(self, context):
-#     self.layout.operator(ExportSomeData.bl_idname, text="Text Export Operator")
-
-
-# def register():
-#     bpy.utils.register_class(ExportSomeData)
-#     bpy.types.INFO_MT_file_export.append(menu_func_export)
-
-
-# def unregister():
-#     bpy.utils.unregister_class(ExportSomeData)
-#     bpy.types.INFO_MT_file_export.remove(menu_func_export)
-
-
-if __name__ == "__main__":
-    register()
-
-    # test call
-    bpy.ops.export_test.some_data('INVOKE_DEFAULT')

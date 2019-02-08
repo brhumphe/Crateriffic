@@ -12,7 +12,8 @@ class RayScanOperator(bpy.types.Operator):
     bl_label = "Ray Scan"
     bl_options = {'REGISTER', 'UNDO'}
 
-    count_x = bpy.props.IntProperty(name="X Samples", min=1, default=10)
+    # BUG: Changing these values no longer updates the displayed points. :/
+    count_x = bpy.props.IntProperty(name="X Samples", min=1, default=20)
     count_y = bpy.props.IntProperty(name="Y Samples", min=1, default=10)
 
     points = []
@@ -53,7 +54,7 @@ class RayScanOperator(bpy.types.Operator):
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             space.show_only_render = self.old_show_render
             context.space_data.show_manipulator = self.old_show_manipulator
-            # self.points.clear()
+            self.points.clear()
             return {'FINISHED'}
         
         else:
@@ -120,5 +121,14 @@ class RayScanOperator(bpy.types.Operator):
         
         self.points = self.scan(bvh, angle_x, angle_y, self.count_x, self.count_y, 
                                 camera.location, camera.rotation_euler)
+
+        try:
+            exists = bpy.data.meshes['scan']
+            bpy.data.meshes.remove(exists)
+        except KeyError:
+            pass
+        # Add a mesh to the scene containing the points
+        mesh = bpy.data.meshes.new("scan")
+        mesh.from_pydata(self.points, [], [])
 
         return {'RUNNING_MODAL'}
