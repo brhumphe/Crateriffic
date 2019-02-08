@@ -6,7 +6,7 @@ from mathutils import Vector, Euler
 from mathutils.bvhtree import BVHTree
 from .utils import linspace
 
-
+# TODO: Re-write to store the scanned points in a mesh in the scene. 
 class RayScanOperator(bpy.types.Operator):
     bl_idname = "mesh.rayscan"
     bl_label = "Ray Scan"
@@ -53,7 +53,7 @@ class RayScanOperator(bpy.types.Operator):
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             space.show_only_render = self.old_show_render
             context.space_data.show_manipulator = self.old_show_manipulator
-            self.points.clear()
+            # self.points.clear()
             return {'FINISHED'}
         
         else:
