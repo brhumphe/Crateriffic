@@ -1,5 +1,7 @@
 import collections
 import numbers
+
+
 class linspace(collections.abc.Sequence):
     """linspace(start, stop, num) -> linspace object
     

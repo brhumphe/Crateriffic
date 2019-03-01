@@ -1,8 +1,7 @@
 import bpy
 import csv
-from .rayscan import RayScanOperator
 
-def write_some_data(context, filepath, use_some_setting):
+def write_some_data(context, filepath):
     print("running write_some_data...")
     f = open(filepath, 'w', encoding='utf-8')
     writer = csv.writer(f)
@@ -23,7 +22,7 @@ from bpy.props import StringProperty, BoolProperty, EnumProperty
 from bpy.types import Operator
 
 # TODO: Re-write to export the data from the mesh holding the scan results.
-class ExportRayScan(Operator, ExportHelper):
+class PSY_OT_ExportRayScan(Operator, ExportHelper):
     """Save any scan data to a csv file."""
     bl_idname = "export_scan.points"  # important since its how bpy.ops.import_test.some_data is constructed
     bl_label = "Save Scan"
@@ -40,4 +39,4 @@ class ExportRayScan(Operator, ExportHelper):
 
 
     def execute(self, context):
-        return write_some_data(context, self.filepath, self.use_setting)
+        return write_some_data(context, self.filepath)

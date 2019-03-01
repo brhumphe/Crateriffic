@@ -6,7 +6,7 @@ from mathutils import Vector
 from bpy_extras.object_utils import world_to_camera_view
 
 
-class HighlightFacingOperator(bpy.types.Operator):
+class PSY_OT_HighlightFacing(bpy.types.Operator):
     bl_idname = "mesh.highlight_visible"
     bl_label = "Highlight Facing"
     bl_options = {'REGISTER', 'UNDO'}
@@ -49,7 +49,7 @@ class HighlightFacingOperator(bpy.types.Operator):
 
         # NOTE: This does not yet correctly handle occluded geometry!
         for v in mesh.verts:
-            color = (1, 1, 1)
+            color = (1, 1, 1, 1)
 
             p = world_to_camera_view(bpy.context.scene, cam, v.co)
             # Check if vertex is visible to camera
@@ -62,7 +62,7 @@ class HighlightFacingOperator(bpy.types.Operator):
 
                     if direction.dot(face.normal) < 0:
                         face.select = True
-                        color = (1, 0, 1)
+                        color = (1, 0, 1, 1)
 
             for face in v.link_faces:
                 # Color faces depending on dot product direction

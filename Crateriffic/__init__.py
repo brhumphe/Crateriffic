@@ -2,13 +2,15 @@ bl_info = {
     "name": "Crateriffic",
     "author": "Benjamin Humpherys",
     "location": "View3D > Tools > Crateriffic",
-    "category": "Development"
+    "category": "Development",
+    "blender": (2, 80, 0)
 }
 
 # When bpy is already in local, we know this is not the initial import...
 if "bpy" in locals():
     print("===========Reloading Crateriffic============")
     # ...so we need to reload our submodule(s) using importlib
+    # TODO: Automate register/unregister
     import importlib
     if "HighlightFacing" in locals():
         importlib.reload(HighlightFacing)
@@ -24,8 +26,9 @@ if "bpy" in locals():
 # are already in locals() and those statements do not do anything.
 import bpy
 from . import HighlightFacing, rayscan, SavePoints
-classes = [HighlightFacing.HighlightFacingOperator,
-            rayscan.RayScanOperator,SavePoints.ExportRayScan]
+classes = [HighlightFacing.PSY_OT_HighlightFacing,
+            rayscan.PSY_OT_RayScan,
+            SavePoints.PSY_OT_ExportRayScan]
 
 def register():
     for c in classes:
