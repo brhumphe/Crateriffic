@@ -20,15 +20,19 @@ if "bpy" in locals():
 
     if "SavePoints" in locals():
         importlib.reload(SavePoints)
+    
+    if "import_footprint" in locals():
+        importlib.reload(import_footprint)
 
 
 # This is only relevant on first run, on later reloads those modules
 # are already in locals() and those statements do not do anything.
 import bpy
-from . import HighlightFacing, rayscan, SavePoints
+from . import HighlightFacing, rayscan, SavePoints, import_footprint
 classes = [HighlightFacing.PSY_OT_HighlightFacing,
             rayscan.PSY_OT_RayScan,
-            SavePoints.PSY_OT_ExportRayScan]
+            SavePoints.PSY_OT_ExportRayScan,
+            import_footprint.PSY_OT_ImportFootprint]
 
 def register():
     for c in classes:
